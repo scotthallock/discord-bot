@@ -21,7 +21,8 @@
   "homepage": "https://github.com/scotthallock/discord-bot#readme",
   "dependencies": {
     "discord.js": "^14.11.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "openai": "^3.2.1"
   },
   "devDependencies": {
     "eslint": "^8.40.0"
