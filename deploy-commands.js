@@ -7,9 +7,9 @@ const commands = [];
 
 // Grab all the command files from the /commands folder
 const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(
-  commandsPath.filter((file) => file.endsWith('.js'))
-);
+const commandFiles = fs
+  .readdirSync(commandsPath)
+  .filter((file) => file.endsWith('.js'));
 
 // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 for (const file of commandFiles) {
@@ -28,7 +28,7 @@ for (const file of commandFiles) {
 const rest = new REST().setToken(token);
 
 // Deploy the commands
-async () => {
+(async () => {
   try {
     console.log(
       `Started refresing ${commands.length} application (/) commands.`
@@ -46,4 +46,4 @@ async () => {
   } catch (error) {
     console.error(error);
   }
-};
+})();
