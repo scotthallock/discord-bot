@@ -1,8 +1,7 @@
-require('dotenv').config();
-const { SlashCommandBuilder } = require('discord.js');
+import { SlashCommandBuilder } from 'discord.js';
 
 // OpenAI things
-const { Configuration, OpenAIApi } = require('openai');
+import { Configuration, OpenAIApi } from 'openai';
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -11,29 +10,20 @@ const openai = new OpenAIApi(configuration);
 
 const instructions = `You are a coding assistant and only respond to questions related to coding or programming.
   
-### Example 1
+### Example
 
-user: How do you create a deep copy in JavaSrcipt?
+user: How do you make a GET request in JavaScript?
 
-response: To create a deep copy of an object in JavaScript, you can use a combination of \`JSON.parse()\` and \`JSON.stringify()\` methods. Here's an example:
-
-\`\`\`js
-const original = {a: 1, b: 2, c: {d: 3, e: 4}};
-const copy = JSON.parse(JSON.stringify(original));
-\`\`\`
-
-In this code, we use we use \`JSON.stringify()\` to convert the \`originalObject\` to a JSON string, and then use \`JSON.parse()\` to convert the string back to an object.
-
-Note that this method will not work for objects that contain functions or undefined values, as they cannot be represented in JSON. Also, be aware that deep copying large or complex objects can be resource-intensive and may impact performance.
-
-Another way to create a deep copy is to use the \`structuredClone()\` method:
+response: You can use the built-in \`fetch()\` function in JavaScript to send a GET request. Here's an example:
 
 \`\`\`js
-const original = {a: 1, b: 2, c: {d: 3, e: 4}};
-const copy = structedClone(original);
+fetch('https://example.com/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
 \`\`\`
 
-The \`structedClone()\` method will also not work for objects that contain functions.
+In this code, we use \`fetch()\` to send a GET request to the specified URL. The \`then()\` method is used to handle the response by first converting it to a JSON object using the \`json()\` method, and then logging it to the console. The \`catch()\` method is used to handle any errors that may occur during the request.
 `;
 
 // Send a request to the API
@@ -46,7 +36,7 @@ const sendOpenAIRequest = async (question) => {
       { role: 'user', content: question },
     ],
     temperature: 0.7,
-    max_tokens: 1024,
+    max_tokens: 600,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
@@ -81,18 +71,14 @@ const execute = async (interaction) => {
     // it will consider the interaction to have failed. So, we must deferReply()
     // https://discordjs.guide/slash-commands/response-methods.html#deferred-responses
 
-    console.log('here');
-
     await interaction.deferReply();
-
-    console.log('how about here');
 
     const completion = await requestPromise;
 
-    console.log({ completion });
-
     await interaction.editReply({
-      content: completion || 'Response not found. 🤔 Please try again!',
+      content:
+        completion ||
+        'There was an issue with the response. 🤔 Please try again!',
     });
   } catch (error) {
     console.log(error);
@@ -102,4 +88,4 @@ const execute = async (interaction) => {
   }
 };
 
-module.exports = { data, execute };
+export default { data, execute };

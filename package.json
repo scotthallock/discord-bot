@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A discord bot for CTRI-16",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node .",
     "lint": "eslint .",
