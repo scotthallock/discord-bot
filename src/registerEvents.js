@@ -3,6 +3,8 @@ import path from 'node:path';
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
 import fileDirName from './utils/fileDirName.js';
 
+import { HIM } from '../config.js';
+
 const { __dirname } = fileDirName(import.meta);
 
 export const registerEvents = async () => {
@@ -10,7 +12,15 @@ export const registerEvents = async () => {
   const BOT_TOKEN = process.env.BOT_TOKEN;
 
   // Create a new client instance
-  const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+  // MessageContent is a privileged intent. You must enable privileged gateway intents
+  // in the Discord Developer Portal under "Privileged Gateway Intents" in the "Bot" section
+  const client = new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
+  });
 
   client.commands = new Collection();
 
@@ -63,6 +73,25 @@ export const registerEvents = async () => {
           ephemeral: true,
         });
       }
+    }
+  });
+
+  // Listen for all new messages
+  // Becuase we have the `MessageContent` intent, we can access the message content
+  client.on(Events.MessageCreate, (message) => {
+    const { content, author } = message;
+
+    // Celebrate a win
+    if (/( w|w |🇼)/.test(content)) {
+      message.react('🇼');
+    }
+
+    // He gets an acorn
+    if (
+      author.username === HIM.username &&
+      author.discriminator === HIM.discriminator
+    ) {
+      message.react('1100547267666137118');
     }
   });
 
