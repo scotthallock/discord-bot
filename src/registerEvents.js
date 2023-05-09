@@ -82,7 +82,7 @@ export const registerEvents = async () => {
     const { content, author } = message;
 
     // Celebrate a win
-    if (/( w|w |🇼)/.test(content)) {
+    if (/( w(?!.)|(?<!a)w |🇼)/.test(content)) {
       message.react('🇼');
     }
 
