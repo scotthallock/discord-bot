@@ -3,13 +3,13 @@ import path from 'node:path';
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
 import fileDirName from './utils/fileDirName.js';
 
-import { HIM } from '../config.js';
-
 const { __dirname } = fileDirName(import.meta);
 
 export const registerEvents = async () => {
   // Environment variables
   const BOT_TOKEN = process.env.BOT_TOKEN;
+  const ACORN_USERNAME = process.env.ACORN_USERNAME;
+  const ACORN_DISCRIMINATOR = process.env.ACORN_DISCRIMINATOR;
 
   // Create a new client instance
   // MessageContent is a privileged intent. You must enable privileged gateway intents
@@ -88,8 +88,8 @@ export const registerEvents = async () => {
 
     // He gets an acorn
     if (
-      author.username === HIM.username &&
-      author.discriminator === HIM.discriminator
+      author.username === ACORN_USERNAME &&
+      author.discriminator === ACORN_DISCRIMINATOR
     ) {
       message.react('1100547267666137118');
     }
